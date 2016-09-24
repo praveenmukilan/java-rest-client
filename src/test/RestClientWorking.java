@@ -5,7 +5,6 @@ import static com.jayway.restassured.RestAssured.given;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.codehaus.groovy.transform.EqualsAndHashCodeASTTransformation;
 
 import com.jayway.restassured.RestAssured;
 import com.jayway.restassured.http.ContentType;
@@ -72,9 +71,27 @@ public class RestClientWorking {
 		
 	}
 	
+	public static String getFulfillmentDetails(String access_token,int fulfillmentId){
+		RestAssured.baseURI="https://core-staging.honestbee.com";
+//		https://core-bee-staging.honestbee.com/api/order_fulfillments/10837?access_token=6b2a4e5c213d2d2d6a5970bbc065cb0ecff9edafd8076b7f35bad28b79af6218&role=shopper
+		Response resp = given()
+				.contentType(ContentType.JSON)
+				.header("Accept","application/vnd.honestbee+json;version=2")
+				.header("Accept-Language","en-SG")
+				.queryParam("access_token", access_token)
+				.queryParam("role", "shopper")
+				.get("/api/order_fulfillments/"+fulfillmentId);
+		
+		
+		System.out.println(resp.asString());
+				return resp.asString();
+		
+	}
+	
 	public static void main(String args[]){
 		accessToken=getAccessToken();
-		getBatches(7, accessToken);
+//		getBatches(7, accessToken);
+		getFulfillmentDetails(accessToken,10837);
 	}
 	
 
